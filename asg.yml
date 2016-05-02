@@ -1,0 +1,25 @@
+- hosts: localhost
+  vars_files:
+    - /root/ansible/include/vars.yml
+
+  tasks:
+  - name: create asg if missing
+    ec2_asg:
+      name: "{{ asg_name }}"
+      launch_config_name: "{{ git_ver }}"
+      vpc_zone_identifier:
+        - "{{ asg_subnet_a }}"
+        - "{{ asg_subnet_b }}"
+      health_check_type: ELB
+      health_check_period: 300
+      desired_capacity: 2
+      replace_all_instances: yes
+      replace_batch_size: 1
+      min_size: 1
+      max_size: 2
+      load_balancers:
+        - "{{ elb_name }}"
+      state: present
+      region: "{{ region }}"
+    register: asg_result
+        

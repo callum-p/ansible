@@ -1,0 +1,15 @@
+- hosts: localhost
+  vars_files:
+    - /root/ansible/include/vars.yml
+
+  tasks:
+  - name: create launch config
+    ec2_lc:
+      region: "{{ region }}"
+      name: "{{ git_ver }}"
+      image_id: "{{ ami_id }}"
+      key_name: "{{ key_name }}"
+      instance_type: "{{ instance_size }}"
+      security_groups: "{{ sg_id }}"
+      instance_monitoring: no
+      user_data: "{{ user_data }}"

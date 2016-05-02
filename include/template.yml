@@ -1,0 +1,20 @@
+key_name: syd
+ami_id: ami-f2210191
+subnet_id: subnet-6f40ba0a
+vpc_id: vpc-3c916459
+sg_id: sg-3827775d
+region: ap-southeast-2
+elb_zone_a: ap-southeast-2a
+elb_zone_b: ap-southeast-2b
+elb_name: ansible-demo
+git_ver: %hash%
+asg_name: testapp
+asg_subnet_a: subnet-6f40ba0a
+asg_subnet_b: subnet-4ebd5e39
+instance_size: t2.micro
+user_data: "#!/bin/bash\n\
+             yum install -y httpd git\n\
+             rm -f /var/www/html/*\n\
+             git clone https://github.com/callum-p/test /var/www/html\n\
+             git reset --hard {{ git_ver }}\n\
+             service httpd start\n"

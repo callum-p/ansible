@@ -1,0 +1,28 @@
+- hosts: localhost
+  vars_files:
+    - /root/ansible/include/vars.yml
+
+  tasks:
+  - name: create elb
+    ec2_elb_lb:
+      name: "{{ elb_name }}"
+      state: present
+      region: "{{ region }}"
+      security_group_ids: "{{ sg_id }}"
+      zones:
+        - "{{ elb_zone_a }}"
+        - "{{ elb_zone_b }}"
+      listeners:
+        - protocol: http
+          load_balancer_port: 80
+          instance_port: 80
+          proxy_protocol: yes
+    
+      health_check:
+        ping_protocol: http
+        ping_port: 80
+        ping_path: '/index.html'
+        response_timeout: 5
+        interval: 30
+        unhealthy_threshold: 2
+        healthy_threshold: 10
